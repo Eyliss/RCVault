@@ -39,6 +39,42 @@ public class Util {
         return data;
     }
 
+    public static byte[] parseByteArray(String s, int length) throws NumberFormatException {
+
+        if(s==null)return null;
+        if(s.length()==0) return new byte[0];
+
+        ByteArrayOutputStream res=new ByteArrayOutputStream();
+
+
+        s.trim();
+        s=s.replaceAll("\\s+", "");
+        s.toUpperCase();
+
+        if((s.length()&0x01)!=0) s="0"+s;
+
+        while(s.length()<length) s="00"+s;
+
+        int l=s.length();
+        int i=0;
+
+        while(l>0)      {
+
+            try {
+                res.write((byte)Integer.parseInt(s.substring(i, i+2),16));
+            }
+            catch(Exception e) {
+                res.write(0xff);
+            }
+
+            i+=2;
+            l-=2;
+
+        }
+
+        return res.toByteArray();
+    }
+
     public static String charStringtoHexString(String arg) {
         return String.format("%040x", new BigInteger(1, arg.getBytes(/*YOUR_CHARSET?*/)));
     }
